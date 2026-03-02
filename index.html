@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For You ❤️</title>
+  <style>
+    :root{
+      --bg1:#0f1226;
+      --bg2:#1c1240;
+      --card:#ffffff10;
+      --card2:#ffffff14;
+      --text:#f7f7ff;
+      --muted:#c9c7ffcc;
+      --accent:#a78bfa;
+      --accent2:#60a5fa;
+      --ok:#34d399;
+      --bad:#fb7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 800px at 15% 20%, #7c3aed33, transparent 60%),
+        radial-gradient(1000px 700px at 85% 25%, #3b82f633, transparent 55%),
+        radial-gradient(900px 700px at 45% 90%, #22c55e22, transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .wrap{
+      width:min(980px, 100%);
+      display:grid;
+      gap:18px;
+      grid-template-columns: 1.05fr .95fr;
+    }
+    @media (max-width: 900px){
+      .wrap{grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background:linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .pad{padding:22px}
+
+    .topline{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:18px 22px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+    .title{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .title h1{font-size:18px; margin:0; letter-spacing:.2px}
+    .title p{margin:0; font-size:13px; color:var(--muted)}
+    .progress{
+      display:flex; align-items:center; gap:10px;
+      font-size:12px; color:var(--muted);
+    }
+    .bar{
+      width:120px; height:10px; border-radius:999px;
+      background: rgba(255,255,255,.12);
+      overflow:hidden;
+    }
+    .bar > i{
+      display:block; height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius:999px;
+      transition: width .5s ease;
+    }
+
+    .qbox{display:flex; flex-direction:column; gap:14px}
+    .qbox h2{margin:0; font-size:18px}
+    .qbox .desc{margin:0; color:var(--muted); font-size:14px; line-height:1.5}
+
+    .options{
+      display:grid;
+      gap:10px;
+      margin-top:4px;
+    }
+    .btn{
+      border:none;
+      border-radius:16px;
+      padding:14px 14px;
+      color:var(--text);
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      cursor:pointer;
+      text-align:left;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-size:14px;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.14)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+    .btn small{color:var(--muted); font-size:12px}
+
+    .inputRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    input[type="text"]{
+      flex:1;
+      min-width: 220px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+    }
+    input::placeholder{color: rgba(255,255,255,.45)}
+    .primary{
+      padding:14px 16px;
+      border-radius:16px;
+      border:none;
+      cursor:pointer;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color:#0b1020;
+      font-weight:700;
+      transition: transform .08s ease, filter .2s ease;
+    }
+    .primary:hover{filter: brightness(1.05)}
+    .primary:active{transform: scale(.99)}
+
+    .msg{
+      min-height:20px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .msg.ok{color: var(--ok)}
+    .msg.bad{color: var(--bad)}
+
+    /* Reveal card */
+    .revealHead{
+      padding:18px 22px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .revealHead .left{display:flex; flex-direction:column; gap:2px}
+    .revealHead h3{margin:0; font-size:16px}
+    .revealHead p{margin:0; font-size:12px; color:var(--muted)}
+    .chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    .chip{
+      font-size:12px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+    }
+    .chip strong{color:var(--text); font-weight:700}
+
+    .stage{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .frame{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      position:relative;
+      aspect-ratio: 4/5;
+      max-height: 620px;
+    }
+    @media (max-width:900px){
+      .frame{aspect-ratio: 3/4;}
+    }
+
+    /* Image under */
+    .frame img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1.02);
+    }
+
+    /* Overlay blur/pixel reveal */
+    .overlay{
+      position:absolute; inset:0;
+      backdrop-filter: blur(18px);
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,.06) 6px, rgba(0,0,0,.00) 6px, rgba(0,0,0,.00) 12px);
+      opacity: 1;
+      transition: opacity .6s ease;
+      pointer-events:none;
+    }
+
+    /* The “windows” we cut out as she answers */
+    .window{
+      position:absolute;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+    .window::before{
+      content:"";
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.0);
+      backdrop-filter: blur(0px);
+    }
+    .window .hint{
+      position:absolute;
+      left:12px; bottom:10px;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+    }
+
+    .note{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      margin:0;
+    }
+
+    .final{
+      display:none;
+      padding:14px 14px 18px;
+      border-top:1px solid rgba(255,255,255,.10);
+      text-align:center;
+    }
+    .final h2{margin:10px 0 4px; font-size:18px}
+    .final p{margin:0; color:var(--muted); font-size:13px}
+
+    .sparkle{
+      position:absolute; inset:auto 14px 14px auto;
+      font-size:12px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- QUIZ -->
+    <section class="card">
+      <div class="topline">
+        <div class="title">
+          <h1>Mini Quest 💜</h1>
+          <p>Answer these to unlock the surprise.</p>
+        </div>
+        <div class="progress">
+          <span id="stepText">Step 1 / 4</span>
+          <div class="bar"><i id="barFill"></i></div>
+        </div>
+      </div>
+
+      <div class="pad">
+        <div class="qbox">
+          <h2 id="qTitle">Loading…</h2>
+          <p class="desc" id="qDesc"></p>
+
+          <div id="options" class="options"></div>
+
+          <div id="inputBlock" style="display:none;">
+            <div class="inputRow">
+              <input id="textAnswer" type="text" placeholder="Type your answer…"/>
+              <button class="primary" id="submitText">Submit</button>
+            </div>
+            <p class="note" style="margin-top:10px;">
+              (Hint: it’s one of these: <strong>You</strong>, <strong>me</strong>, <strong>Ruba</strong>, <strong>my queen</strong>)
+            </p>
+          </div>
+
+          <div class="msg" id="msg"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVEAL -->
+    <section class="card">
+      <div class="revealHead">
+        <div class="left">
+          <h3>Photo Reveal ✨</h3>
+          <p>Each correct answer reveals more.</p>
+        </div>
+        <div class="chips">
+          <span class="chip">Unlocked: <strong id="unlocked">0</strong>/4</span>
+          <span class="chip">Mode: <strong>mystery</strong></span>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="frame" id="frame">
+          <!-- ✅ Put your image in the same repo folder and name it "surprise.jpg" (or change below) -->
+          <img id="photo" src="surprise.jpg" alt="Surprise photo" />
+          <div class="overlay" id="overlay"></div>
+
+          <!-- Windows appear as you progress -->
+          <div class="sparkle" id="sparkle">Locked 🔒</div>
+        </div>
+
+        <p class="note" id="revealNote">
+          Tip: Put the photo file in the same folder as this HTML and name it <strong>surprise.jpg</strong>.
+        </p>
+
+        <div class="final" id="final">
+          <h2>Unlocked 💜</h2>
+          <p>Okay… now you can see it all 😌</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ========= CONFIG =========
+    // Correct answers are enforced exactly as you asked.
+    const questions = [
+      {
+        title: "1) When was the first time we met?",
+        desc: "Pick the correct date 👀",
+        type: "choices",
+        correct: "August 11, 2024 (Sunday)",
+        // Trick options included
+        options: [
+          "August 10, 2024 (Saturday)",
+          "August 11, 2024 (Sunday)",
+          "August 11, 2024 (Monday)",
+          "August 12, 2024 (Sunday)"
+        ]
+      },
+      {
+        title: "2) How long have we known each other for?",
+        desc: "No pressure… but this matters 😄",
+        type: "choices",
+        correct: "1 year and 6 months",
+        options: [
+          "1 year and 3 months",
+          "1 year and 6 months",
+          "1 year and 8 months",
+          "2 years"
+        ]
+      },
+      {
+        title: "3) When will we meet again?",
+        desc: "Choose wisely 😈 (it’s a specific date)",
+        type: "choices",
+        correct: "July 29, 2026",
+        options: [
+          "July 28, 2026",
+          "July 29, 2026",
+          "August 1, 2026",
+          "July 29, 2025"
+        ]
+      },
+      {
+        title: "4) What is the most thing that can make me happy when I look at?",
+        desc: "Type the answer (one of the accepted words).",
+        type: "text",
+        // accepted answers (case-insensitive)
+        accepted: ["you","me","ruba","my queen"]
+      }
+    ];
+
+    // Reveal windows (positions are % based so it works on mobile)
+    const windows = [
+      { x: 8,  y: 10, w: 40, h: 26, label: "Okay… 👀" },
+      { x: 54, y: 18, w: 38, h: 30, label: "More… ✨" },
+      { x: 16, y: 48, w: 70, h: 28, label: "Almost… 💜" },
+      { x: 8,  y: 8,  w: 84, h: 84, label: "All yours 😌" } // final
+    ];
+
+    // ========= STATE =========
+    let step = 0;         // 0..3
+    let unlocked = 0;     // 0..4
+
+    // ========= ELEMENTS =========
+    const qTitle = document.getElementById("qTitle");
+    const qDesc  = document.getElementById("qDesc");
+    const optionsEl = document.getElementById("options");
+    const inputBlock = document.getElementById("inputBlock");
+    const textAnswer = document.getElementById("textAnswer");
+    const submitText = document.getElementById("submitText");
+    const msg = document.getElementById("msg");
+
+    const unlockedEl = document.getElementById("unlocked");
+    const stepText = document.getElementById("stepText");
+    const barFill = document.getElementById("barFill");
+
+    const frame = document.getElementById("frame");
+    const overlay = document.getElementById("overlay");
+    const sparkle = document.getElementById("sparkle");
+    const finalEl = document.getElementById("final");
+
+    // ========= HELPERS =========
+    function setProgress(){
+      stepText.textContent = `Step ${Math.min(step+1,4)} / 4`;
+      const pct = (unlocked/4)*100;
+      barFill.style.width = `${pct}%`;
+      unlockedEl.textContent = unlocked;
+
+      sparkle.textContent = unlocked === 0 ? "Locked 🔒" :
+                            unlocked === 1 ? "Warming up ✨" :
+                            unlocked === 2 ? "Halfway 👀" :
+                            unlocked === 3 ? "One left 💜" : "Unlocked ✅";
+    }
+
+    function clearMsg(){
+      msg.className = "msg";
+      msg.textContent = "";
+    }
+
+    function showMsg(text, ok){
+      msg.textContent = text;
+      msg.className = "msg " + (ok ? "ok" : "bad");
+    }
+
+    function normalize(s){
+      return (s || "").toString().trim().toLowerCase();
+    }
+
+    function renderQuestion(){
+      clearMsg();
+      setProgress();
+
+      if(step >= questions.length){
+        // done
+        qTitle.textContent = "Done 💜";
+        qDesc.textContent = "You unlocked everything.";
+        optionsEl.innerHTML = "";
+        inputBlock.style.display = "none";
+        return;
+      }
+
+      const q = questions[step];
+      qTitle.textContent = q.title;
+      qDesc.textContent = q.desc;
+
+      optionsEl.innerHTML = "";
+      inputBlock.style.display = "none";
+
+      if(q.type === "choices"){
+        q.options.forEach(opt => {
+          const b = document.createElement("button");
+          b.className = "btn";
+          b.innerHTML = `<span>${opt}</span><small>tap</small>`;
+          b.onclick = () => handleChoice(opt);
+          optionsEl.appendChild(b);
+        });
+      } else {
+        inputBlock.style.display = "block";
+        textAnswer.value = "";
+        textAnswer.focus();
+      }
+    }
+
+    function addRevealWindow(index){
+      const w = windows[index];
+      const div = document.createElement("div");
+      div.className = "window";
+      div.style.left = w.x + "%";
+      div.style.top  = w.y + "%";
+      div.style.width  = w.w + "%";
+      div.style.height = w.h + "%";
+      div.innerHTML = `<div class="hint">${w.label}</div>`;
+      frame.appendChild(div);
+
+      // If final step, remove overlay
+      if(index === 3){
+        overlay.style.opacity = "0";
+        finalEl.style.display = "block";
+      }
+    }
+
+    function unlockNext(){
+      // add window reveal
+      addRevealWindow(unlocked);
+      unlocked++;
+      setProgress();
+    }
+
+    // ========= HANDLERS =========
+    function handleChoice(selected){
+      const q = questions[step];
+      if(selected === q.correct){
+        showMsg("Correct 😌 keep going…", true);
+        unlockNext();
+        step++;
+        setTimeout(renderQuestion, 450);
+      } else {
+        showMsg("Nope 😈 try again.", false);
+      }
+    }
+
+    function handleTextSubmit(){
+      const q = questions[step];
+      const val = normalize(textAnswer.value);
+
+      const ok = q.accepted.includes(val);
+      if(ok){
+        showMsg("Perfect 💜", true);
+        unlockNext();
+        step++;
+        setTimeout(renderQuestion, 450);
+      } else {
+        showMsg("Not quite… try: You / me / Ruba / my queen", false);
+      }
+    }
+
+    submitText.addEventListener("click", handleTextSubmit);
+    textAnswer.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") handleTextSubmit();
+    });
+
+    // ========= INIT =========
+    setProgress();
+    renderQuestion();
+  </script>
+</body>
+</html>
